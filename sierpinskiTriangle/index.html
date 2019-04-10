@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sierpinski Triangle</title>
+    <script src="sierpinski.js"></script>
+  </head>
+  <body>
+    <h1>Sierpinski Triangle</h1>
+    <div>
+      <label for="cantidadIteraciones">Iterations</label>
+      <input type="number" name="cantidadIteraciones" id="cantidadIteraciones">
+    </div>
+    <div>
+      <label for="dispersion">Dispersion</label>
+      <input type="number" name="dispersion" id="dispersion">
+    </div>
+    <div>
+      <label for="cantidadAristas">Vertices</label>
+      <input type="number" name="cantidadAristas" id="cantidadAristas">
+      <button type="button" onclick="begin()">Dibujar</button>
+    </div>
+    <canvas width="500" height="500"></canvas>
+  </body>
+</html>
