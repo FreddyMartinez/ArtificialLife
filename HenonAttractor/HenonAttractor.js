@@ -1,3 +1,8 @@
+/*
+ * This is the Henon Map with classical values, but, you can change that values as 'a' and 'b'
+ * Author: Freddy Martínez
+ */
+
 var x0 = 0;
 var y0 = 0;
 var a = 1.4;
