@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class Cell : MonoBehaviour {
+﻿public class Cell {
     public float a = 1.0f;
     public float b = 0f;
 }
