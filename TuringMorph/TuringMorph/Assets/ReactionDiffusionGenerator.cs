@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 using System.IO;
 
 public class ReactionDiffusionGenerator : MonoBehaviour
@@ -9,8 +9,8 @@ public class ReactionDiffusionGenerator : MonoBehaviour
 
     private float Da = 1f;
     private float Db = 0.5f;
-    private float f = 0.055f;
-    private float k = 0.062f;
+    private float f = 0.045f;
+    private float k = 0.065f;
 
     private int count = 0;
 
@@ -29,7 +29,7 @@ public class ReactionDiffusionGenerator : MonoBehaviour
     {
         GenNewTexture();
         count += 1;
-        if(count == 5)
+        if(count == 20)
         {
             RefreshTexture();
             count = 0;
@@ -55,19 +55,14 @@ public class ReactionDiffusionGenerator : MonoBehaviour
                 grid[x, y] = new Cell();
             }
         }
-
-        for (int x = 100; x < 110; x++)
+        
+        for (int x = 10; x < 145; x++)
         {
-            for (int y = 100; y < 110; y++)
+            for (int y = 10; y < 145; y++)
             {
-                grid[x, y].b = 1f;
-            }
-        }
-        for (int x = 10; x < 20; x++)
-        {
-            for (int y = 100; y < 110; y++)
-            {
-                grid[x, y].b = 1f;
+                //grid[x, y].b = 1;
+                System.Random rand = new System.Random();
+                grid[x, y].b = rand.Next(0, 2);
             }
         }
     }
@@ -129,7 +124,7 @@ public class ReactionDiffusionGenerator : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                texture.SetPixel(x, y, Color.Lerp(Color.yellow, Color.blue, grid[x, y].b *3f));
+                texture.SetPixel(x, y, Color.Lerp(Color.blue, Color.black, grid[x, y].b *3f));
             }
         }
         texture.Apply();
