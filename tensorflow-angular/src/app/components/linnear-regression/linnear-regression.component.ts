@@ -6,11 +6,10 @@ import * as tf from '@tensorflow/tfjs';
   templateUrl: './linnear-regression.component.html',
   styleUrls: ['./linnear-regression.component.scss']
 })
-export class LinnearRegressionComponent implements OnInit {
+export class LinnearRegressionComponent implements OnInit, AfterViewInit {
 
   @ViewChild('myCanvas', {static: false}) myCanvas: ElementRef;
   context: CanvasRenderingContext2D;
-  title = 'tensorFlowApp';
   linearModel: tf.Sequential;
   prediction: any;
   realM = 0.52;
@@ -41,11 +40,11 @@ export class LinnearRegressionComponent implements OnInit {
 
   generateData() {
     this.xs = new Array<number>();
-    for (let i = 0; i < 100; i++) {
-      this.xs.push(i * 5);
+    for (let i = 0; i < 600; i += 5) {
+      this.xs.push(i);
     }
     this.ys = this.xs.map( x => {
-      return x * this.realM + this.realB + (Math.random() - 1) * 25;
+      return x * this.realM + this.realB + (Math.random() - 0.5) * 200;
     });
   }
 
@@ -94,10 +93,7 @@ export class LinnearRegressionComponent implements OnInit {
     return prediction.sub(label).square().mean();
   }
 
-
   drawLine() {
-    console.log('drawline');
-
     this.context.clearRect(0, 0,
       this.context.canvas.width,
       this.context.canvas.height);
