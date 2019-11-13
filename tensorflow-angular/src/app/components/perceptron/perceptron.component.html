@@ -1,0 +1,14 @@
+<div>
+  <label for="">a</label>
+  <input type="number" min="0" (change)="predict()" [(ngModel)]="inputA">
+</div>
+<div>
+  <label for="">b</label>
+  <input type="number" min="0" (change)="predict()" [(ngModel)]="inputB">
+</div>
+<div>
+  Resultado: {{ prediction }}
+</div>
+<div>
+  Mi resultado: {{ myPrediction }}
+</div>

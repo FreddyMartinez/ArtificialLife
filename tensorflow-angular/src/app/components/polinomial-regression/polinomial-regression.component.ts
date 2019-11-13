@@ -123,7 +123,7 @@ export class PolinomialRegressionComponent implements OnInit, AfterViewInit {
     this.drawPoints();
   }
 
-  stopTraining(){
+  stopTraining() {
     clearInterval(this.trainingInterval);
   }
 }

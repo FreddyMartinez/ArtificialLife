@@ -111,7 +111,7 @@ export class LinnearRegressionComponent implements OnInit, AfterViewInit {
     this.drawPoints();
   }
 
-  stopTraining(){
+  stopTraining() {
     clearInterval(this.trainingInterval);
   }
 }
