@@ -27,7 +27,6 @@ p {
 
 .toolbar {
   height: 60px;
-  margin: -8px;
   display: flex;
   align-items: center;
   background-color: #1976d2;
@@ -283,4 +282,14 @@ svg#clouds {
     display: none;
     visibility: hidden;
   }
+}
+
+.navbar-nav {
+  flex-direction: row;
+  width: 100%;
+  text-align: right;
+}
+
+.nav-link {
+  margin: 0 15px;
 }
