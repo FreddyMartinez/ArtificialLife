@@ -8,23 +8,29 @@ import * as tf from '@tensorflow/tfjs';
 })
 export class PerceptronComponent implements OnInit {
 
-  linearModel: tf.Sequential;
-  public prediction: any;
-
+  /**
+   * These variables are used for tensorflow perceptron
+   */
   public inputA = 0;
   public inputB = 0;
+
+  linearModel: tf.Sequential;
+  public prediction: any;
 
   xs = [[0.1, 0.1], [0.2, 0.2], [0.9, 0.1], [0.1, 0.9], [0.8, 0.8], [0.9, 0.9]];
   // ys = [0, 0, 1, 1, 1, 1]; // OR Gate
   ys = [0, 0, 0, 0, 1, 1]; // AND Gate
   // ys = [1, 1, 0, 0, 0, 0]; // NOR Gate
 
+  /**
+   * These variables are used for manually created perceptron
+   */
   public w1 = 1;
-  public w2: number = 1;
-  public b: number = -1.5;
+  public w2 = 1;
+  public b = -1.5;
   public myPrediction: number;
+  public myRoundedPrediction: number;
 
-  constructor() { }
 
   ngOnInit() {
     this.train();
@@ -47,7 +53,7 @@ export class PerceptronComponent implements OnInit {
     console.log('model trained!');
   }
 
-  predict() {
+  predict(): void {
     const output = this.linearModel.predict(tf.tensor2d([this.inputA, this.inputB], [1, 2])) as any;
     this.prediction = Array.from(output.dataSync())[0];
     this.perceptron();
@@ -61,8 +67,9 @@ export class PerceptronComponent implements OnInit {
      return 1 / (1 + Math.exp(-x));
    }
 
-   perceptron() {
+   perceptron(): void {
      const z = this.inputA * this.w1 + this.inputB * this.w2 + this.b;
      this.myPrediction = this.sigmoid(z);
+     this.myRoundedPrediction = Math.round(this.myPrediction);
    }
 }

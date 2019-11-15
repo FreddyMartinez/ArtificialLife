@@ -85,7 +85,6 @@ export class PolinomialRegressionComponent implements OnInit, AfterViewInit {
   scaleData(data: number[]) {
     const max = Math.max(...data);
     const min = Math.min(...data);
-    const diff = max - min;
     return data.map(d => (d) / max);
   }
 
