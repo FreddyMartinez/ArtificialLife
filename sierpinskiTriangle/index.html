@@ -12,14 +12,16 @@
       <input type="number" name="cantidadIteraciones" id="cantidadIteraciones">
     </div>
     <div>
-      <label for="dispersion">Dispersion</label>
+      <label for="dispersion">Dispersion (between 0.5 and 1)</label>
       <input type="number" name="dispersion" id="dispersion">
     </div>
     <div>
-      <label for="cantidadAristas">Vertices</label>
+      <label for="cantidadAristas">Vertices (3 or more)</label>
       <input type="number" name="cantidadAristas" id="cantidadAristas">
-      <button type="button" onclick="begin()">Dibujar</button>
     </div>
-    <canvas width="500" height="500"></canvas>
+    <button type="button" onclick="begin()">DRAW</button>
+    <div style="margin: 1rem;">
+      <canvas width="500" height="500" style="border: solid 1px;"></canvas>
+    </div>
   </body>
 </html>

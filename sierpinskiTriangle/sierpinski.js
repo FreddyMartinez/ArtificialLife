@@ -5,9 +5,9 @@
  */
 
 //dispersion must be a value between 0.5 and 1
-var dispersion = 0.5;
+var dispersion;
 //number of points must be greater than 2
-var numberOfPoints = 3;
+var numberOfPoints;
 
 var Point = function (x, y) {
   this.x = x;
@@ -30,22 +30,29 @@ Point.prototype.halfway = function (base) {
   );
 };
 
-var Sierpinski = function (id) {
-  this.canvas = document.getElementById(id) || document.getElementsByTagName("canvas")[0];
+var Sierpinski = function () {
+  this.canvas = document.getElementsByTagName("canvas")[0];
+  this.context = this.canvas.getContext("2d");
   this.x_size = this.canvas.width/2;
   this.y_size = this.canvas.height/2;
-  this.centerPoint = new Point(this.canvas.width/2, this.canvas.height/2);
+  this.centerPoint = new Point(this.x_size, this.y_size);
   this.points = [];
+  this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
 
   for(let c=1; c<=numberOfPoints; c++){
-    this.points.push(new Point(this.centerPoint.x + this.x_size * Math.sin(Math.PI * 2 *c / numberOfPoints), this.centerPoint.y + this.x_size * Math.cos(Math.PI * 2 * c / numberOfPoints)));
+    this.points.push(
+      new Point(
+        this.x_size +
+          this.x_size * Math.sin((Math.PI * 2 * c) / numberOfPoints),
+        this.y_size - this.x_size * Math.cos((Math.PI * 2 * c) / numberOfPoints)
+      )
+    );
   }
 
   this.current_point = new Point(
     Math.floor((Math.random() * this.x_size)),
     Math.floor((Math.random() * this.y_size))
   );
-  this.canvas = this.canvas.getContext("2d");
 };
 
 //this function choose a vertex randomly
@@ -62,21 +69,20 @@ Sierpinski.prototype.draw = function () {
 
 //here we draw the point
 Sierpinski.prototype.draw_point = function (point) {
-  var c = this.canvas;
-  c.fillStyle = "#000000";
-  c.beginPath();
-  c.arc(point.x, point.y, 1, 0, Math.PI * 2, true);
-  c.closePath();
-  c.fill();
+  this.context.fillStyle = "#000000";
+  this.context.beginPath();
+  this.context.arc(point.x, point.y, 1, 0, Math.PI * 2, true);
+  this.context.fill();
+  this.context.closePath();
 };
 
 //set the values and begin the process
 function begin(){
-  var cant = document.getElementById("cantidadIteraciones").value;
-  dispersion = document.getElementById("dispersion").value;
-  numberOfPoints = document.getElementById("cantidadAristas").value;
+  var iterations = document.getElementById("cantidadIteraciones").value;
+  dispersion = document.getElementById("dispersion").value || 0.5;
+  numberOfPoints = document.getElementById("cantidadAristas").value || 3;
   var triangle = new Sierpinski();
-  for (var i = 0; i < cant; i++){
+  for (var i = 0; i < iterations; i++){
     triangle.draw();
   }
 }
