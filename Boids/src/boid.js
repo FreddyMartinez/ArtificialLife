@@ -3,7 +3,7 @@ class Boid {
 	perception = 100;
 	maxCohesion = 0.25;
 	maxSteering = 0.1;
-	maxSeparation = 1;
+	maxSeparation = 0.1;
 
 	constructor(x, y) {
 		this.position = createVector(x, y);
@@ -12,9 +12,20 @@ class Boid {
 	}
 
 	show() {
-		strokeWeight(10);
+		strokeWeight(2);
 		stroke(255);
-		point(this.position.x, this.position.y);
+    const direction = createVector(this.velocity.x, this.velocity.y);
+    direction.setMag(10);
+    const ortogonal = createVector(this.velocity.y, this.velocity.x);
+    ortogonal.setMag(5);
+    triangle(
+			this.position.x + direction.x,
+			this.position.y + direction.y,
+			this.position.x + ortogonal.x,
+			this.position.y - ortogonal.y,
+			this.position.x - ortogonal.x,
+			this.position.y + ortogonal.y
+		);
 	}
 
 	update() {
@@ -73,12 +84,13 @@ class Boid {
 		for (let neighbor of neighbours) {
       const distance = this.position.dist(neighbor.position);
       const singleSeparation = p5.Vector.sub(this.position, neighbor.position);
-      singleSeparation.div(distance);
+      singleSeparation.div(Math.pow(distance, 2));
 			avgSeparation.add(singleSeparation);
 		}
 		if (neighbours.length > 0) {
 			avgSeparation
 				.div(neighbours.length)
+        .setMag(this.maxSpeed)
 				.sub(this.velocity)
 				.limit(this.maxSeparation);
 		}
