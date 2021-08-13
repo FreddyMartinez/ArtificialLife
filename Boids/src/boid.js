@@ -1,9 +1,10 @@
 class Boid {
 	maxSpeed = 4;
+  maxForce = 0.5;
 	perception = 100;
-	maxCohesion = 0.25;
-	maxSteering = 0.1;
-	maxSeparation = 0.1;
+	maxCohesion = 0.3;
+	maxSteering = 0.3;
+	maxSeparation = 0.3;
 
 	constructor(x, y) {
 		this.position = createVector(x, y);
@@ -33,16 +34,15 @@ class Boid {
 		this.velocity.add(this.acceleration);
 		this.velocity.setMag(this.maxSpeed);
 		this.acceleration.mult(0);
-		this.edges();
 	}
 
-	flock(flock, maxAlignment, maxCohesion, maxSeparation) {
+	flock(flock, maxAlignment, maxCohesion, maxSeparation, obstacles) {
     this.maxSteering = maxAlignment;
     this.maxCohesion = maxCohesion;
     this.maxSeparation = maxSeparation;
 		const neighbours = [];
 		for (let neighbor of flock) {
-			let distance = this.position.dist(neighbor.position);
+			const distance = this.position.dist(neighbor.position);
 			if (neighbor != this && distance < this.perception) {
 				neighbours.push(neighbor);
 			}
@@ -50,7 +50,15 @@ class Boid {
 		const alignment = this.alignment(neighbours);
 		const cohesion = this.cohesion(neighbours);
 		const separation = this.separation(neighbours);
-		this.acceleration.add(alignment).add(cohesion).add(separation);
+    const edges = this.avoidEdges();
+    const obstaclesAvoidance = this.avoidObstacles(obstacles);
+		this.acceleration
+			.add(alignment)
+			.add(cohesion)
+			.add(separation)
+			.add(edges)
+      .add(obstaclesAvoidance)
+			.limit(this.maxForce);
 	}
 
 	alignment(neighbours) {
@@ -97,15 +105,51 @@ class Boid {
 		return avgSeparation;
   }
 
-	edges() {
-		if (this.position.x > width) {
-			this.position.x = 0;
-		} else if (this.position.x < 0) {
-			this.position.x = width;
-		} else if (this.position.y < 0) {
-			this.position.y = height;
-		} else if (this.position.y > height) {
-			this.position.y = 0;
+  avoidEdges() {
+    const avoidEdge = createVector(0, 0);
+		if (this.position.x > width - this.perception) {
+      if (this.position.x >= width) {
+        this.position.x = width - 1;
+      }
+			avoidEdge.x -= 200 / (width - this.position.x);
+		} else if (this.position.x < this.perception) {
+      if (this.position.x <= 0) {
+        this.position.x = 1;
+      }
+			avoidEdge.x += 200 / this.position.x;
+		} else if (this.position.y < this.perception) {
+      if (this.position.y <= 0) {
+        this.position.y = 1;
+      }
+			avoidEdge.y += 200 / this.position.y;
+		} else if (this.position.y > height - this.perception) {
+      if (this.position.y >= height) {
+        this.position.y = height - 1;
+      }
+      avoidEdge.y -= 200 / (height - this.position.y);
 		}
+    return avoidEdge;
 	}
+
+  avoidObstacles(obstacles) {
+    const avoidObstacles = createVector(0, 0);
+    let obstaclesNumber = 0;
+    for (let obstacle of obstacles) {
+			const distance = this.position.dist(obstacle.position);
+			if (distance < this.perception) {
+				const singleSeparation = p5.Vector.sub(this.position, obstacle.position);
+        singleSeparation.div(Math.pow(distance, 2));
+        avoidObstacles.add(singleSeparation);
+        obstaclesNumber ++;
+			}
+		}
+    if (obstaclesNumber > 0) {
+			avoidObstacles
+				.div(obstaclesNumber)
+        .setMag(this.maxSpeed)
+				.sub(this.velocity);
+		}
+		return avoidObstacles;
+  }
+
 }
