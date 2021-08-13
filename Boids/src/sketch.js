@@ -1,5 +1,5 @@
 
-const flock = [];
+let flock = [];
 const obstacles = [];
 let alignSlider, cohesionSlider, separationSlider;
 
@@ -24,6 +24,8 @@ function draw() {
     boid.update();
     boid.show();
   }
+
+  flock = flock.filter( boid => boid.isAlive);
 
   for(let obs of obstacles) {
     obs.show();
