@@ -10,18 +10,18 @@ const Db = 0.5;
 const f = 0.055;
 const k = 0.062;
 
-cols = 100;
-rows = 100;
+cols = 200;
+rows = 200;
 
 function setup() {
-	createCanvas(600, 600);
+	createCanvas(cols, rows);
 	background(0);
   currentGrid = [];
   nextGrid = [];
-  for (let i = 0; i <= cols; i++) {
+  for (let i = 0; i < cols; i++) {
     currentGrid[i] = [];
     nextGrid[i] = [];
-		for (let j = 0; j <= rows; j++) {
+		for (let j = 0; j < rows; j++) {
       currentGrid[i][j] = {a: 1, b: 0};
       nextGrid[i][j] = {a: 1, b: 0};
     }
@@ -35,8 +35,8 @@ function setup() {
 }
 
 function draw() {
-  for (let i = 1; i < cols; i++) {
-		for (let j = 1; j < rows; j++) {
+  for (let i = 1; i < cols-1; i++) {
+		for (let j = 1; j < rows-1; j++) {
       const a = currentGrid[i][j].a;
       const b = currentGrid[i][j].b;
       nextGrid[i][j].a =
@@ -46,14 +46,14 @@ function draw() {
     }
 	}
 
-  for (let i = 0; i <= cols; i++) {
-		for (let j = 0; j <= rows; j++) {
-      fill(Math.floor(nextGrid[i][j].a * 255), 0, Math.floor(nextGrid[i][j].b * 255));
-      noStroke();
-      rect(i*(width/cols),j*(height/rows), width/cols, height/rows)
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < height; y++) {
+      const c = Math.floor((nextGrid[x][y].a - nextGrid[x][y].b) * 255);
+      const pcolor = color(c , c, c); 
+      set(x,y,pcolor); 
     }
-	} 
-
+  }
+  updatePixels();
   // current takes the new values
   currentGrid = JSON.parse(JSON.stringify(nextGrid));
 }
