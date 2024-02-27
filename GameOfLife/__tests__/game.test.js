@@ -6,6 +6,9 @@ const {
   regenerateBoard,
   drawBoard,
   attachGridEventHandler,
+  readCellsFromDOM,
+  start,
+  stop,
 } = window.game;
 
 describe("Game of life", () => {
@@ -108,6 +111,39 @@ describe("Game of life", () => {
       document.querySelector(".alive").click();
       expect(document.querySelectorAll(".dead").length).toBe(1);
       expect(document.querySelectorAll(".alive").length).toBe(0);
+    });
+  });
+
+  describe("Read cells from dom", () => {
+    it("should return an array of cells from DOM", () => {
+      document.body.innerHTML = `<div id="grid"></div>`;
+      const cells = [0, 1, 0, 1]
+      drawBoard(cells);
+      expect(readCellsFromDOM()).toEqual(cells);
+    });
+  });
+
+  describe("Game start", () => {
+    it("should start the game", () => {
+      jest.useFakeTimers({ legacyFakeTimers: true });
+      const readCellsSpy = jest.spyOn(game, "readCellsFromDOM");
+      const regenerateSpy = jest.spyOn(game, "regenerateBoard");
+      const drawBoardSpy = jest.spyOn(game, "regenerateBoard");
+      start();
+      jest.runOnlyPendingTimers();
+      expect(setInterval).toHaveBeenCalled();
+      expect(readCellsSpy).toHaveBeenCalled();
+      expect(regenerateSpy).toHaveBeenCalled();
+      expect(drawBoardSpy).toHaveBeenCalled();
+      expect(start).not.toThrow();
+    });
+  });
+
+  describe("Stop function", () => {
+    it("should clear interval", () => {
+      jest.useFakeTimers({ legacyFakeTimers: true });
+      stop();
+      expect(clearInterval).toHaveBeenCalled();
     });
   });
 });

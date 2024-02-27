@@ -56,7 +56,6 @@ const drawBoard = (cells) => {
     const cellDiv = createElement(`cell ${!!cell ? "alive" : "dead"}`);
     row.appendChild(cellDiv);
   });
-
 };
 
 const attachGridEventHandler = () => {
@@ -65,6 +64,25 @@ const attachGridEventHandler = () => {
     classList.toggle("dead");
     classList.toggle("alive");
   });
+};
+
+const readCellsFromDOM = () =>
+  Array.from(document.querySelectorAll(".cell"), (cell) =>
+    cell.classList.contains("alive") ? 1 : 0
+  );
+
+let gameLoop;
+
+const start = () => {
+  let currentBoard = game.readCellsFromDOM();
+  gameLoop = setInterval(() => {
+    currentBoard = game.regenerateBoard(currentBoard);
+    game.drawBoard(currentBoard);
+  }, 300);
+};
+
+const stop = () => {
+  clearInterval(gameLoop);
 }
 
 window.game = {
@@ -74,4 +92,7 @@ window.game = {
   regenerateBoard,
   drawBoard,
   attachGridEventHandler,
+  readCellsFromDOM,
+  start,
+  stop,
 };
