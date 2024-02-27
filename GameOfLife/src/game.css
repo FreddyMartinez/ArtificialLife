@@ -56,6 +56,6 @@ button:disabled {
   border: 1px solid #808080;
 }
 
-.cell.live {
+.cell.alive {
   background-color: #1c1c1c;
 }
