@@ -35,9 +35,43 @@ const countNeighbours = (cells, index) => {
 const regenerateBoard = (cells) =>
   cells.map((cell, index) => isAlive(cell, countNeighbours(cells, index)));
 
+const createElement = (className) => {
+  const div = document.createElement("div");
+  div.className = className;
+  return div;
+};
+
+const drawBoard = (cells) => {
+  const width = Math.sqrt(cells.length);
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  let row;
+  cells.forEach((cell, index) => {
+    if (index % width === 0) {
+      row = createElement("row");
+      grid.appendChild(row);
+    }
+
+    const cellDiv = createElement(`cell ${!!cell ? "alive" : "dead"}`);
+    row.appendChild(cellDiv);
+  });
+
+};
+
+const attachGridEventHandler = () => {
+  document.getElementById("grid").addEventListener("click", (event) => {
+    const classList = event.target.classList;
+    classList.toggle("dead");
+    classList.toggle("alive");
+  });
+}
+
 window.game = {
   isAlive,
   generateEmptyBoard,
   countNeighbours,
   regenerateBoard,
+  drawBoard,
+  attachGridEventHandler,
 };

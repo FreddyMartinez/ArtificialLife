@@ -1,6 +1,12 @@
 require("../src/index");
-const { isAlive, generateEmptyBoard, countNeighbours, regenerateBoard } =
-  window.game;
+const {
+  isAlive,
+  generateEmptyBoard,
+  countNeighbours,
+  regenerateBoard,
+  drawBoard,
+  attachGridEventHandler,
+} = window.game;
 
 describe("Game of life", () => {
   describe("isAlive algorithm", () => {
@@ -68,6 +74,40 @@ describe("Game of life", () => {
       const cells = generateEmptyBoard(2);
       cells[0] = 1;
       expect(regenerateBoard(cells)).toEqual([0, 0, 0, 0]);
+    });
+  });
+
+  describe("Browser grid", () => {
+    it("should display the grid cells", () => {
+      document.body.innerHTML = `<div id="grid"></div>`;
+      drawBoard([1, 0, 0, 0]);
+      expect(document.getElementById("grid")).not.toBeNull();
+      expect(document.querySelectorAll(".row").length).toBe(2);
+      expect(document.querySelectorAll(".cell").length).toBe(4);
+      expect(document.querySelectorAll(".dead").length).toBe(3);
+      expect(document.querySelectorAll(".alive").length).toBe(1);
+
+      drawBoard([0, 0, 1, 1]);
+      expect(document.querySelectorAll(".dead").length).toBe(2);
+      expect(document.querySelectorAll(".alive").length).toBe(2);
+    });
+  });
+
+  describe("Event handler for grid", () => {
+    it("should toggle cell state live/dead when clicked", () => {
+      document.body.innerHTML = `<div id="grid"></div>`;
+      drawBoard([0]);
+      attachGridEventHandler();
+      const cells = document.querySelectorAll(".cell");
+      expect(cells.length).toBe(1);
+      expect(document.querySelectorAll(".dead").length).toBe(1);
+      expect(document.querySelectorAll(".alive").length).toBe(0);
+      document.querySelector(".dead").click();
+      expect(document.querySelectorAll(".dead").length).toBe(0);
+      expect(document.querySelectorAll(".alive").length).toBe(1);
+      document.querySelector(".alive").click();
+      expect(document.querySelectorAll(".dead").length).toBe(1);
+      expect(document.querySelectorAll(".alive").length).toBe(0);
     });
   });
 });
