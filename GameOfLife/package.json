@@ -1,0 +1,19 @@
+{
+  "name": "game-of-life",
+  "version": "1.0.0",
+  "description": "Simple version of the Game of Life simulation",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "test:dev": "jest --coverage --watchAll"
+  },
+  "keywords": [
+    "jest"
+  ],
+  "author": "Freddy Martínez",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}
